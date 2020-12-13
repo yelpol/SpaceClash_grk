@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>zadania 5</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h2 id="ii-teksturowanie">II Teksturowanie</h2>
+<h3 id="ii.0-obejrzyj-plik-texture.h-aby-zapoznać-się-z-nowym-interfejsem-do-obsługi-tekstur.">II.0 Obejrzyj plik <strong>Texture.h</strong> aby zapoznać się z nowym interfejsem do obsługi tekstur.</h3>
+<h3 id="ii.1-przygotuj-shadery-i-załaduj-teksturę">II.1 Przygotuj shadery i załaduj teksturę:</h3>
+<ol type="a">
+<li>W kolejnych zadaniach będziemy potrzebować trzecią parę shaderów: -Skopiuj pliki <strong>shader_4_1.vert</strong> <strong>shader_4_1.frag</strong>, następnie zmień kopiom nazwy odpowienio na <strong>shader_4_tex.vert</strong> i <strong>shader_4_tex.frag</strong>.</li>
+</ol>
+<ul>
+<li>Wczytaj shadery i przechowaj adres programu pod zmienną globalną <code>programTex</code> (tzn. powtórz dla nich punkt 6.a, ale zamiast <code>programSun</code> nazwij zmienną <code>programTex</code>).</li>
+<li>Prześlij globalne <em>uniformy</em> do <code>programTex</code>.</li>
+</ul>
+<ol start="2" type="a">
+<li>ładowanie tekstury:</li>
+</ol>
+<ul>
+<li>Stwórz w kodzie C++ zmienną globalną o typie <code>GLuint</code> (typ zwracany funkcji <code>Core::LoadTexture</code>).</li>
+<li>W funkcji <code>init()</code> przypisz wynik wykonania funkcji <code>Core::LoadTexture</code> do nowej zmiennej. Ścieżka do tekstury to: <strong>textures/grid.png</strong>.</li>
+</ul>
+<h3 id="ii.2.-stwórz-funkcje-odpowiadająca-za-rysowanie-teksturowanych-obiektów">II.2. Stwórz funkcje odpowiadająca za rysowanie teksturowanych obiektów:</h3>
+<ul>
+<li>Skopiuj funkcję <code>drawObject</code>. Nazwij kopię <code>drawObjectTexture()</code> i zmodyfikują ją tak, aby przyjmowała jako parametr identyfikator tekstury, a nie wektor koloru. (Usuń w niej linijkę odpowiadającą za przesyłanie koloru, żeby uniknąć błęu komunikacji, póżniej dodamy na jej miejsce ładowanie tekstury).</li>
+</ul>
+<h3 id="ii.3.-zmodyfikuj-shader-tak-aby-nakładał-teksturę-na-obiekt">II.3. Zmodyfikuj shader tak, aby nakładał teksturę na obiekt:</h3>
+<ol type="a">
+<li><p>Narysuj jedną z planet za pomocą <code>drawObjectTexture()</code>, użyj <code>programTex</code> jako programu.</p></li>
+<li><p>Prześlij współrzędne mapowania tekstur z vertex shadera do fragment shadera</p></li>
+</ol>
+<ul>
+<li>Wspołrzędne tekstur to kolejny (po pozycjach i wektorach normalnych) atrybut wierzchołków - są dostępne w vertex shaderze pod nazwą <code>vertexTexCoord</code></li>
+<li>Prześlij je znanym już sposobem do fragment shadera (zmienna <code>out</code> w vertex shaderze i odpowiadająca jej zmienna <code>in</code> we fragment shaderze)</li>
+</ul>
+<ol start="3" type="a">
+<li>Prześlij teksturę do fragment shadera:</li>
+</ol>
+<ul>
+<li>Stwórz zmienną typu <code>uniform sampler2D</code> (nazwij ją na przykład <code>colorTexture</code>) we fragment shaderze - analogicznie do innych zmiennych typu uniform, służy ona do przesyłania informacji bezpośrednio z kodu C++ do shadera</li>
+<li>Po stronie kodu C++ użyj funkcji <code>Core::SetActiveTexture</code> wewnątrz <code>drawObjectTexture()</code> aby ustawić zmienną <code>sampler2D</code> na wczytaną wcześniej teksturę</li>
+</ul>
+<ol start="4" type="a">
+<li>Użyj wartości uzyskanej z tekstury zamiast koloru (<code>objectColor</code>) do pokolorowania obiektu:</li>
+</ol>
+<ul>
+<li>Wykonaj próbkowanie tekstury we współrzędnych otrzymanych przez fragment shader: <code>vec4 textureColor = texture2D(~nazwaZmiennejSampler2D, ~nazwaZmiennejWspolrzedneTekstury)</code>" (<code>vec4</code> zawiera kolor RGBA)</li>
+<li>Użyj pierwszych trzech współrzędnych (RGB) uzyskanego wektora jako nowego koloru bazowego piksela</li>
+</ul>
+<h3 id="ii.4.-pobaw-się-mechanizmem-teksturowania">II.4. Pobaw się mechanizmem teksturowania:</h3>
+<ul>
+<li>Przemnóż jedną lub obie ze współrzędnych mapowania przez 5 i sprawdź co się stanie</li>
+<li>Wypróbuj pozostałe tekstury: <strong>grid_color.png</strong>, <strong>earth.png</strong> i <strong>earth2.png</strong>.</li>
+<li>Tekstury Ziemi wyświetlają się “do góry nogami”. Napraw to.</li>
+<li>Jeśli chcesz mieć kilka planet o różnych teksturach możesz skorzystać z <a href="https://www.solarsystemscope.com/textures/">link</a> lub <a href="https://stevealbers.net/albers/sos/sos.html">link2</a></li>
+</ul>
+<h3 id="ii.5.-teksturowanie-proceduralne">II.5. Teksturowanie proceduralne</h3>
+<ol type="a">
+<li><p>Stwórz czwartą parę plików z shaderami (np. <strong>shader_proc_tex.vert</strong> i <strong>shader_proc_tex.frag</strong>). Następnie zainicjalizuj program jak w I.6.a) i II.1.a) (nazwij go np <code>programProcTex</code>). Do wywołania rysowania wykorzystuj funkcję <code>drawObject</code> (Żeby nie tracić oteksturowanych planet, możesz rysować za ich pomocą wyłącznie statek).</p></li>
+<li><p>Prostym sposobem proceduralnego teksturowania, jest uzależnienie koloru od pozycji piksela w przestrzeni lokalnej (użycie przestrzeni świata spowodowałoby, że wzór na obiekcie zmieniałby się przy poruszaniu go).</p></li>
+</ol>
+<ul>
+<li>Prześlij z vertex shadera do fragment shadera pozycję wierzchołka w przestrzeni lokalnej (czyli tej, w której wyrażone są atrybuty wierzchołka - nie trzeba więc wykonywać żadnej transformacji macierzowej)</li>
+<li>We fragment shaderze oblicz sinus współrzędnej y pozycji piksela</li>
+<li>Jeżeli sinus jest większy od zera, to ustaw bazowy kolor obiektu na wybrany kolor, a jeśli jest mniejszy od zera, to na inny kolor</li>
+<li>Możesz przesłać te kolory przy użyciu zmiennych uniform z kodu C++ - pozwoli to rysować różne obiekty z różnymi parami kolorów</li>
+<li>Poeksperymentuj z innymi metodami teksturowania proceduralnego podanymi na wykładzie</li>
+</ul>
+</body>
+</html>
