@@ -39,14 +39,11 @@ glm::vec3 sunPosition = glm::vec3(0);
 static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
 
-float xprev = 0.1;
-float yprev = 0.1;
+float lastX = 300.0f, lastY = 300.0f;
+float yaw = 0.0f;
+float pitch = 0.0f;
 
-float xdiff = 0.0f;
-float ydiff = 0.0f;
-float zdiff = 0.0f;
-
-glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+glm::quat rotation = glm::quat(1, 0, 0, 0);
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -54,8 +51,8 @@ void keyboard(unsigned char key, int x, int y)
 	float moveSpeed = 0.1f;
 	switch(key)
 	{
-	case 'z': zdiff = -angleSpeed; break;
-	case 'x': zdiff = angleSpeed; break;
+	case 'z': rotation = glm::angleAxis(-angleSpeed, glm::vec3(0, 0, 1)) * rotation; break;
+	case 'x': rotation = glm::angleAxis(angleSpeed, glm::vec3(0, 0, 1)) * rotation; break;
 	case 'w': cameraPos += cameraDir * moveSpeed; break;
 	case 's': cameraPos -= cameraDir * moveSpeed; break;
 	case 'd': cameraPos += cameraSide * moveSpeed; break;
@@ -65,29 +62,29 @@ void keyboard(unsigned char key, int x, int y)
 
 void mouse(int x, int y)
 {
-	xdiff = x - xprev;
-	ydiff = y - yprev;
+	float xoffset = x - lastX;
+	float yoffset = y - lastY;
+	lastX = x;
+	lastY = y;
 
-	xprev = x;
-	yprev = y;
+	const float sen = 0.00001f;
+	xoffset *= sen;
+	yoffset *= sen;
+
+	yaw += xoffset;
+	pitch += yoffset;
 }
 
 glm::mat4 createCameraMatrix()
 {
-	glm::quat rotationX = glm::angleAxis(xdiff*0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::quat rotationY = glm::angleAxis(ydiff*0.01f, glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::quat rotationZ = glm::angleAxis(zdiff, glm::vec3(0.0f, 0.0f, 1.0f));
-
-
-	glm::quat rotationChange = rotationX * rotationY * rotationZ;
+	glm::quat rotationAboutX = glm::angleAxis(pitch, glm::vec3(1, 0, 0));
+	glm::quat rotationAboutY = glm::angleAxis(yaw, glm::vec3(0, 1, 0));
+	glm::quat rotationChange = rotationAboutX * rotationAboutY;
 	rotation = glm::normalize(rotationChange * rotation);
 
-	xdiff = 0;
-	ydiff = 0;
-	zdiff = 0;
-
 	cameraDir = glm::inverse(rotation) * glm::vec3(0, 0, -1);
-	cameraSide = glm::inverse(rotation) * glm::vec3(1, 0, 0);
+	glm::vec3 up = glm::vec3(0, 1, 0);
+	cameraSide = glm::cross(cameraDir, up);
 	return Core::createViewMatrixQuat(cameraPos, rotation);
 }
 
@@ -184,14 +181,14 @@ void renderScene()
 
 	drawSkybox(&sphereModel, glm::translate(cameraPos)*glm::scale(glm::vec3(30)), textureSkybox);
 
-	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0,-0.25f,0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0,1,0)) * glm::scale(glm::vec3(0.25f));
+	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0,-0.25f,0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0,1,0)) * glm::scale(glm::vec3(0.05f));
 	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 
 	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
 	// drawSun(&sphereModel, sunMatrix, textureSun);
 	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
-	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.6f), lightDir);
+	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
