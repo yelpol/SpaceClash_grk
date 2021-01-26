@@ -14,7 +14,7 @@
 GLuint programColor;
 GLuint programTexture;
 GLuint programSkybox;
-// GLuint programSun; //próba stworznia osobnych shaderów do słońca, jak w cw.4 (w trakcie)
+// GLuint programSun; //pr�ba stworznia osobnych shader�w do s?o?ca, jak w cw.4 (w trakcie)
 
 Core::Shader_Loader shaderLoader;
 
@@ -49,7 +49,7 @@ void keyboard(unsigned char key, int x, int y)
 {
 	float angleSpeed = 0.1f;
 	float moveSpeed = 0.1f;
-	switch(key)
+	switch (key)
 	{
 	case 'z': rotation = glm::angleAxis(-angleSpeed, glm::vec3(0, 0, 1)) * rotation; break;
 	case 'x': rotation = glm::angleAxis(angleSpeed, glm::vec3(0, 0, 1)) * rotation; break;
@@ -88,7 +88,7 @@ glm::mat4 createCameraMatrix()
 	return Core::createViewMatrixQuat(cameraPos, rotation);
 }
 
-void drawObjectColor(obj::Model * model, glm::mat4 modelMatrix, glm::vec3 color, glm::vec3 lightDir)
+void drawObjectColor(obj::Model* model, glm::mat4 modelMatrix, glm::vec3 color, glm::vec3 lightDir)
 {
 	GLuint program = programColor;
 
@@ -108,7 +108,7 @@ void drawObjectColor(obj::Model * model, glm::mat4 modelMatrix, glm::vec3 color,
 	glUseProgram(0);
 }
 
-void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint textureId,  glm::vec3 lightDir)
+void drawObjectTexture(obj::Model* model, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
 {
 	GLuint program = programTexture;
 
@@ -128,7 +128,7 @@ void drawObjectTexture(obj::Model * model, glm::mat4 modelMatrix, GLuint texture
 	glUseProgram(0);
 }
 
-void drawSkybox(obj::Model * model, glm::mat4 modelMatrix, GLuint textureId)
+void drawSkybox(obj::Model* model, glm::mat4 modelMatrix, GLuint textureId)
 {
 	GLuint program = programSkybox;
 	glUseProgram(program);
@@ -179,9 +179,9 @@ void renderScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
 
-	drawSkybox(&sphereModel, glm::translate(cameraPos)*glm::scale(glm::vec3(30)), textureSkybox);
+	drawSkybox(&sphereModel, glm::translate(cameraPos) * glm::scale(glm::vec3(30)), textureSkybox);
 
-	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0,-0.25f,0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0,1,0)) * glm::scale(glm::vec3(0.05f));
+	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
 	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 
@@ -214,7 +214,7 @@ void init()
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
-	for(int i = 0; i < NUM_ASTEROIDS; i++)
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		asteroidPositions[i] = glm::ballRand(10.f);
 	}
@@ -234,7 +234,7 @@ void idle()
 	glutPostRedisplay();
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);

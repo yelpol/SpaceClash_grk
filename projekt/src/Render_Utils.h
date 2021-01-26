@@ -1,9 +1,37 @@
 #pragma once
-
+#include "glm.hpp"
+#include "ext.hpp"
+#include "glew.h"
 #include "objload.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 namespace Core
 {
+	static inline glm::mat4 mat4_cast(const aiMatrix4x4& m) { return glm::transpose(glm::make_mat4(&m.a1)); }
+
+
+	struct RenderContext
+    {
+		GLuint vertexArray;
+		GLuint vertexBuffer;
+		GLuint vertexIndexBuffer;
+		int size = 0;
+
+        void initFromOBJ(obj::Model& model);
+
+		void initFromAssimpMesh(aiMesh* mesh);
+	};
+
+	struct Node {
+		std::vector<RenderContext> renderContexts;
+		glm::mat4 matrix;
+		int parent;
+	};
+
 	// vertexArray - jednowymiarowa tablica zawierajaca wartosci opisujace pozycje kolejnych wierzcholkow w jednym ciagu (x1, y1, z1, w1, x2, y2, z2, w2, ...)
 	// numVertices - liczba wierzcholkow do narysowania
 	// elementSize - liczba wartosci opisujacych pojedynczy wierzcholek (np. 3 gdy wierzcholek opisany jest trojka (x, y, z))
@@ -50,5 +78,7 @@ namespace Core
 	*/
 	void DrawVertexArray(const VertexData & data);
 
-	void DrawModel(obj::Model * model);
+	void DrawContext(RenderContext& context);
+
+	void DrawModel(obj::Model* model);
 }
