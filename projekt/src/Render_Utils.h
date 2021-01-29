@@ -1,19 +1,12 @@
 #pragma once
 #include "glm.hpp"
-#include "ext.hpp"
 #include "glew.h"
 #include "objload.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 namespace Core
 {
-	static inline glm::mat4 mat4_cast(const aiMatrix4x4& m) { return glm::transpose(glm::make_mat4(&m.a1)); }
-
-
 	struct RenderContext
     {
 		GLuint vertexArray;
@@ -22,15 +15,8 @@ namespace Core
 		int size = 0;
 
         void initFromOBJ(obj::Model& model);
-
-		void initFromAssimpMesh(aiMesh* mesh);
 	};
 
-	struct Node {
-		std::vector<RenderContext> renderContexts;
-		glm::mat4 matrix;
-		int parent;
-	};
 
 	// vertexArray - jednowymiarowa tablica zawierajaca wartosci opisujace pozycje kolejnych wierzcholkow w jednym ciagu (x1, y1, z1, w1, x2, y2, z2, w2, ...)
 	// numVertices - liczba wierzcholkow do narysowania
@@ -48,13 +34,13 @@ namespace Core
 		int Size;
 	};
 
-	struct VertexData
-	{
-		static const int MAX_ATTRIBS = 8;
-		VertexAttribute Attribs[MAX_ATTRIBS];
-		int NumActiveAttribs;
-		int NumVertices;
-	};
+	//struct VertexData
+	//{
+	//	static const int MAX_ATTRIBS = 8;
+	//	VertexAttribute Attribs[MAX_ATTRIBS];
+	//	int NumActiveAttribs;
+	//	int NumVertices;
+	//};
 
 	// Ta funkcja sluzy do rysowania trojkatow, ktorych wierzcholki moga byc opisane wiecej niz jednym atrybutem.
 	// Funkcja przyjmuje jako parametr strukture, w ktorej nalezy zawrzec wszystkie potrzebne dane.
@@ -76,9 +62,9 @@ namespace Core
 	Core::DrawVertexArray(vertexData);
 
 	*/
-	void DrawVertexArray(const VertexData & data);
+	//void DrawVertexArray(const VertexData & data);
 
 	void DrawContext(RenderContext& context);
-
+	
 	void DrawModel(obj::Model* model);
 }

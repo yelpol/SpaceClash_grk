@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iterator>
 #include <vector>
-#include "picopng.h"
+#include "SOIL/SOIL.h"
 
 typedef unsigned char byte;
 
@@ -17,18 +17,13 @@ GLuint Core::LoadTexture( const char * filepath )
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	std::ifstream input( filepath, std::ios::binary );
-	std::vector<char> buffer((
-		std::istreambuf_iterator<char>(input)), 
-		(std::istreambuf_iterator<char>()));
-
-	unsigned long w, h;
-	std::vector<unsigned char> decoded;
-	decodePNG(decoded, w, h, (unsigned char*)&buffer[0], buffer.size(), true);
+	int w, h;
+	unsigned char* image = SOIL_load_image(filepath, &w, &h, 0, SOIL_LOAD_RGBA);
 	
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &decoded[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image);
 
 	return id;
 }
