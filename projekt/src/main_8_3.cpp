@@ -6,11 +6,15 @@
 #include <cmath>
 #include <vector>
 
+#include <filesystem>
+
 #include "Shader_Loader.h"
 #include "Render_Utils.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Physics.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "SOIL/stb_image_aug.h"
 
 GLuint programColor;
 GLuint programTexture;
@@ -32,13 +36,14 @@ float cameraAngle = 0;
 glm::mat4 cameraMatrix, perspectiveMatrix;
 
 GLuint textureAsteroid;
-GLuint textureSkybox;
-GLuint textureSun;
-
-glm::vec3 sunPosition = glm::vec3(0);
-
 static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
+
+GLuint textureSun;
+glm::vec3 sunPosition = glm::vec3(0);
+
+unsigned int cubemapTexture;
+unsigned int skyboxVAO, skyboxVBO;
 
 float lastX = 300.0f, lastY = 300.0f;
 float yaw = 0.0f;
@@ -129,19 +134,23 @@ void drawObjectTexture(obj::Model* model, glm::mat4 modelMatrix, GLuint textureI
 	glUseProgram(0);
 }
 
-void drawSkybox(obj::Model* model, glm::mat4 modelMatrix, GLuint textureId)
+void drawSkybox(unsigned int cubemapTexture)
 {
-	GLuint program = programSkybox;
-	glUseProgram(program);
 
-	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
-	//glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+	//skybox
+	glUseProgram(programSkybox);
+	glDepthFunc(GL_LEQUAL);
+	glm::mat4 transformation = perspectiveMatrix * glm::mat4(glm::mat3(cameraMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(programSkybox, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
+	// skybox cube
+	glBindVertexArray(skyboxVAO);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	glDepthFunc(GL_LESS); // set depth function back to default
 
-	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
-	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
-	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
-
-	Core::DrawModel(model);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(0);
 }
@@ -179,28 +188,88 @@ void renderScene()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
+	
+	drawSkybox(cubemapTexture);
 
-	drawSkybox(&sphereModel, glm::translate(cameraPos) * glm::scale(glm::vec3(30)), textureSkybox);
+	//glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
+	////glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
+	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 
-	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
-	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
+	//// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
+	//// drawSun(&sphereModel, sunMatrix, textureSun);
+	//glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
+	//drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
 
-	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
-	// drawSun(&sphereModel, sunMatrix, textureSun);
-	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
-	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
+	//for (int i = 0; i < NUM_ASTEROIDS; i++)
+	//{
+	//	drawObjectTexture(&sphereModel, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir);
+	//}
 
-	for (int i = 0; i < NUM_ASTEROIDS; i++)
-	{
-		drawObjectTexture(&sphereModel, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir);
-	}
-
-	//glm::mat4 sunMatrix = glm::translate(lightPos);
-	//drawSun(&sphereModel, sunMatrix, textureSun);
-	drawSun(sunPosition);
+	////glm::mat4 sunMatrix = glm::translate(lightPos);
+	////drawSun(&sphereModel, sunMatrix, textureSun);
+	//drawSun(sunPosition);
 
 	glutSwapBuffers();
+}
+
+void initSkybox() {
+
+	GLuint program = programSkybox;
+	float skyboxVertices[] = {
+		// positions
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	Core::SetActiveTexture(cubemapTexture, "cubemap", program, 0);
+
+	// skybox VAO
+	glGenVertexArrays(1, &skyboxVAO);
+	glBindVertexArray(skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 }
 
 void init()
@@ -219,8 +288,49 @@ void init()
 	{
 		asteroidPositions[i] = glm::ballRand(10.f);
 	}
-	textureSkybox = Core::LoadTexture("textures/sky.png");
+
 	textureSun = Core::LoadTexture("textures/sun.png");
+
+	std::vector<std::string> faces
+	{
+		"textures/skybox/right.png",
+		"textures/skybox/left.png",
+		"textures/skybox/top.png",
+		"textures/skybox/bottom.png",
+		"textures/skybox/front.png",
+		"textures/skybox/back.png",
+	};
+	//loadCubemap
+	unsigned int id;
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+
+	int width, height, nrChannels;
+	unsigned char* data;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap tex failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	cubemapTexture = id;
+	std::cout << cubemapTexture << '\n';
+
+
+	initSkybox();
 }
 
 void shutdown()

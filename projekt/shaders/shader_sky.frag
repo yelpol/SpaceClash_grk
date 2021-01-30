@@ -1,13 +1,13 @@
 #version 430 core
 
-uniform sampler2D textureSampler;
+uniform samplerCube cubemap;
 
-in vec3 interpNormal;
-in vec2 interpTexCoord;
-in vec4 vertPosition_ws;
+//in vec2 interpTexCoord;
+in vec3 interpTexCoord;
 
 void main()
 {
-	vec3 color = texture2D(textureSampler, interpTexCoord).rgb;
-	gl_FragColor = vec4(color, 1.0);
+	//vec3 color = texture2D(textureSampler, interpTexCoord).rgb;
+	//gl_FragColor = vec4(color, 1.0);
+	gl_FragColor = texture(cubemap, interpTexCoord);
 }
