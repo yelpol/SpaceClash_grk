@@ -1,0 +1,46 @@
+﻿  Camera.cpp
+  main_8_3.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(75,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(76,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(279,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(314,17): warning C4101: 'data': unreferenced local variable
+  Physics.cpp
+  Render_Utils.cpp
+  Shader_Loader.cpp
+  Texture.cpp
+  Generating Code...
+  image_DXT.c
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\image_DXT.c(92,9): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  image_helper.c
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\image_helper.c(325,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\image_helper.c(366,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\image_helper.c(373,46): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\image_helper.c(415,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\image_helper.c(422,62): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  SOIL.c
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\SOIL.c(1719,36): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\SOIL.c(1729,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\SOIL.c(1841,6): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  stb_image_aug.c
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(177,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(251,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(303,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(1557,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(2394,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(2709,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(2995,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(3209,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(3548,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stb_image_aug.c(3644,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stbi_DDS_aug_c.h(362,19): warning C4018: '>': signed/unsigned mismatch
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stbi_DDS_aug_c.h(366,19): warning C4018: '>': signed/unsigned mismatch
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stbi_DDS_aug_c.h(390,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stbi_DDS_aug_c.h(427,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\SOIL\stbi_DDS_aug_c.h(498,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Generating Code...
+Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+  grk-cw8.vcxproj -> C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\grk-cw8.exe
