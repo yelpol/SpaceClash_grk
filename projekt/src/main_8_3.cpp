@@ -25,6 +25,8 @@ Core::Shader_Loader shaderLoader;
 
 obj::Model shipModel;
 obj::Model sphereModel;
+Core::RenderContext shipContext;
+Core::RenderContext sphereContext;
 
 glm::vec3 cameraPos = glm::vec3(-5, 0, 0);
 glm::vec3 cameraDir; // Wektor "do przodu" kamery
@@ -94,7 +96,7 @@ glm::mat4 createCameraMatrix()
 	return Core::createViewMatrixQuat(cameraPos, rotation);
 }
 
-void drawObjectColor(obj::Model* model, glm::mat4 modelMatrix, glm::vec3 color, glm::vec3 lightDir)
+void drawObjectColor(Core::RenderContext context, glm::mat4 modelMatrix, glm::vec3 color, glm::vec3 lightDir)
 {
 	GLuint program = programColor;
 
@@ -109,12 +111,12 @@ void drawObjectColor(obj::Model* model, glm::mat4 modelMatrix, glm::vec3 color, 
 	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
 	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
 
-	Core::DrawModel(model);
+	Core::DrawContext(context);
 
 	glUseProgram(0);
 }
 
-void drawObjectTexture(obj::Model* model, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
+void drawObjectTexture(Core::RenderContext context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
 {
 	GLuint program = programTexture;
 
@@ -129,7 +131,7 @@ void drawObjectTexture(obj::Model* model, glm::mat4 modelMatrix, GLuint textureI
 	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
 	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
 
-	Core::DrawModel(model);
+	Core::DrawContext(context);
 
 	glUseProgram(0);
 }
@@ -159,7 +161,7 @@ void drawSun(glm::vec3 pos)
 {
 	sunPosition = pos;
 	glm::vec3 lightDir = glm::normalize(sunPosition - cameraPos);
-	drawObjectTexture(&sphereModel, glm::translate(sunPosition), textureSun, lightDir);
+	drawObjectTexture(sphereContext, glm::translate(sunPosition), textureSun, lightDir);
 }
 // void drawSun(obj::Model * model, glm::mat4 modelMatrix, GLuint textureId)
 // {
@@ -191,23 +193,23 @@ void renderScene()
 	
 	drawSkybox(cubemapTexture);
 
-	//glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
-	////glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
-	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
+	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
+	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
+	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 
-	//// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
-	//// drawSun(&sphereModel, sunMatrix, textureSun);
-	//glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
-	//drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
+	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
+	// drawSun(&sphereModel, sunMatrix, textureSun);
+	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
+	drawObjectColor(shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
 
-	//for (int i = 0; i < NUM_ASTEROIDS; i++)
-	//{
-	//	drawObjectTexture(&sphereModel, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir);
-	//}
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		drawObjectTexture(sphereContext, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir);
+	}
 
-	////glm::mat4 sunMatrix = glm::translate(lightPos);
-	////drawSun(&sphereModel, sunMatrix, textureSun);
-	//drawSun(sunPosition);
+	//glm::mat4 sunMatrix = glm::translate(lightPos);
+	//drawSun(&sphereModel, sunMatrix, textureSun);
+	drawSun(sunPosition);
 
 	glutSwapBuffers();
 }
@@ -283,6 +285,9 @@ void init()
 
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
+	shipContext.initFromOBJ(shipModel);
+	sphereContext.initFromOBJ(sphereModel);
+
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
