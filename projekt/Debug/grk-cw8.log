@@ -1,0 +1,10 @@
+﻿  main_8_3.cpp
+C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\src\main_8_3.cpp(192,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\src\main_8_3.cpp(267,10): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\src\main_8_3.cpp(268,10): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\src\main_8_3.cpp(450,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
+PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
+PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
+PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
+  grk-cw8.vcxproj -> C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\grk-cw8.exe

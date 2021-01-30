@@ -1,0 +1,10 @@
+C:\Users\piotr\Desktop\grafika komputerowa\grk-cw8b\Debug\grk-cw8.exe
+C:\Users\piotr\Desktop\grafika komputerowa\grk-cw8b\Debug\grk-cw8.pdb
+C:\Users\piotr\Desktop\grafika komputerowa\grk-cw8b-pl\Debug\grk-cw8.exe
+C:\Users\piotr\Desktop\grafika komputerowa\grk-cw8b-pl\Debug\grk-cw8.pdb
+C:\Users\piotr\Desktop\grafika komputerowa\setup\grk-cw8b-pl\Debug\grk-cw8.exe
+C:\Users\piotr\Desktop\grafika komputerowa\setup\grk-cw8b-pl\Debug\grk-cw8.pdb
+C:\Users\piotr\Desktop\grafika komputerowa\setup\projekt\Debug\grk-cw8.exe
+C:\Users\piotr\Desktop\grafika komputerowa\setup\projekt\Debug\grk-cw8.pdb
+C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\grk-cw8.exe
+C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\grk-cw8.pdb
