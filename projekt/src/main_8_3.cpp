@@ -19,7 +19,7 @@
 GLuint programColor;
 GLuint programTexture;
 GLuint programSkybox;
-// GLuint programSun; //próba stworznia osobnych shaderów do s?o?ca, jak w cw.4 (w trakcie)
+GLuint programSun;
 
 Core::Shader_Loader shaderLoader;
 
@@ -42,7 +42,6 @@ static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
 
 GLuint textureSun;
-glm::vec3 sunPosition = glm::vec3(0);
 
 unsigned int cubemapTexture;
 unsigned int skyboxVAO, skyboxVBO;
@@ -136,6 +135,26 @@ void drawObjectTexture(Core::RenderContext context, glm::mat4 modelMatrix, GLuin
 	glUseProgram(0);
 }
 
+void drawSun(Core::RenderContext context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
+{
+	GLuint program = programSun;
+
+	glUseProgram(program);
+
+	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
+	glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
+
+	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
+	glUniformMatrix4fv(glGetUniformLocation(program, "transformation"), 1, GL_FALSE, (float*)&transformation);
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
+
+	Core::DrawContext(context);
+
+	glUseProgram(0);
+}
+
 void drawSkybox(unsigned int cubemapTexture)
 {
 
@@ -157,31 +176,6 @@ void drawSkybox(unsigned int cubemapTexture)
 	glUseProgram(0);
 }
 
-void drawSun(glm::vec3 pos)
-{
-	sunPosition = pos;
-	glm::vec3 lightDir = glm::normalize(sunPosition - cameraPos);
-	drawObjectTexture(sphereContext, glm::translate(sunPosition), textureSun, lightDir);
-}
-// void drawSun(obj::Model * model, glm::mat4 modelMatrix, GLuint textureId)
-// {
-//
-// 	GLuint program = programSun;
-// 	glUseProgram(program);
-//
-// 	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
-// 	glUniform3f(glGetUniformLocation(programSun, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
-//
-// 	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
-// 	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
-// 	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
-//
-// 	Core::DrawModel(model);
-//
-// 	glUseProgram(0);
-// }
-
-
 void renderScene()
 {
 	// Aktualizacja macierzy widoku i rzutowania
@@ -197,19 +191,17 @@ void renderScene()
 	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
 	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 
-	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
-	// drawSun(&sphereModel, sunMatrix, textureSun);
-	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
+	glm::vec3 lightPos = glm::vec3(0, 0, 0);
+	glm::vec3 lightDir = glm::normalize(cameraPos - lightPos);
 	drawObjectColor(shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		drawObjectTexture(sphereContext, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir);
 	}
-
-	//glm::mat4 sunMatrix = glm::translate(lightPos);
-	//drawSun(&sphereModel, sunMatrix, textureSun);
-	drawSun(sunPosition);
+	
+	glm::mat4 matrixSun = glm::translate(glm::vec3(0, 0, 0));
+	drawSun(sphereContext, matrixSun, textureSun, lightDir);
 
 	glutSwapBuffers();
 }
@@ -281,7 +273,7 @@ void init()
 	programColor = shaderLoader.CreateProgram("shaders/shader_color.vert", "shaders/shader_color.frag");
 	programTexture = shaderLoader.CreateProgram("shaders/shader_tex.vert", "shaders/shader_tex.frag");
 	programSkybox = shaderLoader.CreateProgram("shaders/shader_sky.vert", "shaders/shader_sky.frag");
-	//programSun = shaderLoader.CreateProgram("shaders/shader_4_sun.vert", "shaders/shader_4_sun.frag");
+	programSun = shaderLoader.CreateProgram("shaders/shader_4_sun.vert", "shaders/shader_4_sun.frag");
 
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
@@ -343,6 +335,7 @@ void shutdown()
 	shaderLoader.DeleteProgram(programColor);
 	shaderLoader.DeleteProgram(programTexture);
 	shaderLoader.DeleteProgram(programSkybox);
+	shaderLoader.DeleteProgram(programSun);
 }
 
 void idle()
