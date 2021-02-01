@@ -7,6 +7,9 @@
 #include <vector>
 
 #include <filesystem>
+#include <assimp/Importer.hpp>
+#include<assimp/scene.h>
+#include<assimp/postprocess.h>
 
 #include "Shader_Loader.h"
 #include "Render_Utils.h"
@@ -38,6 +41,7 @@ float cameraAngle = 0;
 glm::mat4 cameraMatrix, perspectiveMatrix;
 
 GLuint textureAsteroid;
+GLuint textureShip;
 static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
 
@@ -82,6 +86,9 @@ void mouse(int x, int y)
 	yaw += xoffset;
 	pitch += yoffset;
 }
+
+/// Assimp plane obeject
+
 
 glm::mat4 createCameraMatrix()
 {
@@ -200,7 +207,7 @@ void renderScene()
 	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
 	// drawSun(&sphereModel, sunMatrix, textureSun);
 	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
-	drawObjectColor(shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
+	drawObjectTexture(shipContext, shipModelMatrix, textureShip, lightDir);
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
@@ -289,6 +296,7 @@ void init()
 	sphereContext.initFromOBJ(sphereModel);
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
+	textureShip = Core::LoadTexture("textures/ShipTexture.png");
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		asteroidPositions[i] = glm::ballRand(10.f);
