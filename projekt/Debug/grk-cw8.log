@@ -1,10 +1,4 @@
-﻿  main_8_3.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(79,10): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(80,10): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
-C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(286,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(322,17): warning C4101: "data": lokalna zmienna, do której nie istnieje odwołanie
-Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
+﻿Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
 PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)” lub w pozycji „C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
 PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)” lub w pozycji „C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
 PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)” lub w pozycji „C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
