@@ -113,6 +113,7 @@ std::vector<Renderable*> renderables;
 
 
 GLuint textureAsteroid;
+GLuint textureShip;
 static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
 
@@ -376,7 +377,7 @@ void renderScene()
 	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
 	// drawSun(&sphereModel, sunMatrix, textureSun);
 	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
-	drawObjectColor(&shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
+	drawObjectTexture(&shipContext, shipModelMatrix, textureShip, lightDir);
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
@@ -473,6 +474,7 @@ void init()
 	sphereContext.initFromOBJ(sphereModel);
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
+	textureShip = Core::LoadTexture("textures/ShipTexture.png");
 	textureSun = Core::LoadTexture("textures/sun.png");
 	textureBullet = Core::LoadTexture("textures/green.jpg");
 
