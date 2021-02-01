@@ -233,8 +233,8 @@ void mouse(int x, int y)
 {
 	float xoffset = x - lastX;
 	float yoffset = y - lastY;
-	lastX = x;
-	lastY = y;
+	lastX = (float)x;
+	lastY = (float)y;
 
 	const float sen = 0.00001f;
 	xoffset *= sen;
@@ -383,11 +383,9 @@ void renderScene()
 	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
 	// drawSun(&sphereModel, sunMatrix, textureSun);
 	glm::vec3 lightDir = glm::normalize(cameraPos - sunPosition);
-<<<<<<< HEAD
-	drawObjectTexture(shipContext, shipModelMatrix, textureShip, lightDir);
-=======
+
 	drawObjectTexture(&shipContext, shipModelMatrix, textureShip, lightDir);
->>>>>>> shooting
+
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
@@ -485,12 +483,9 @@ void init()
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
 	textureShip = Core::LoadTexture("textures/ShipTexture.png");
-<<<<<<< HEAD
-=======
 	textureSun = Core::LoadTexture("textures/sun.png");
 	textureBullet = Core::LoadTexture("textures/green.jpg");
 
->>>>>>> shooting
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		asteroidPositions[i] = glm::ballRand(10.f);

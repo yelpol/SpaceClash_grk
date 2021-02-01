@@ -1,4 +1,9 @@
-﻿Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
+﻿  main_8_3.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(161,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(471,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(511,17): warning C4101: "data": lokalna zmienna, do której nie istnieje odwołanie
+Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
 PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)” lub w pozycji „C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
 PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)” lub w pozycji „C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
 PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)” lub w pozycji „C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
