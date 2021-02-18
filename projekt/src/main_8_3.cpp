@@ -38,6 +38,7 @@ float cameraAngle = 0;
 glm::mat4 cameraMatrix, perspectiveMatrix;
 
 GLuint textureAsteroid;
+GLuint textureAsteroidNormal;
 static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
 
@@ -115,15 +116,18 @@ void drawObjectColor(Core::RenderContext context, glm::mat4 modelMatrix, glm::ve
 	glUseProgram(0);
 }
 
-void drawObjectTexture(Core::RenderContext context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
+void drawObjectTexture(Core::RenderContext context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir, GLuint normalmapId)
 {
 	GLuint program = programTexture;
 
 	glUseProgram(program);
 
 	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
-	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
 	glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+	Core::SetActiveTexture(textureId, "textureSampler", program, 1);
+	Core::SetActiveTexture(normalmapId, "normalSampler", program, 0);
+	
 	//glUniform3f(glGetUniformLocation(program, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
 	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
@@ -184,7 +188,7 @@ void renderScene()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
-	
+
 	drawSkybox(cubemapTexture);
 
 	glm::mat4 shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
@@ -197,9 +201,9 @@ void renderScene()
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
-		drawObjectTexture(sphereContext, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir);
+		drawObjectTexture(sphereContext, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir, textureAsteroidNormal);
 	}
-	
+
 	glm::mat4 matrixSun = glm::translate(glm::vec3(0, 0, 0));
 	drawSun(sphereContext, matrixSun, textureSun, lightDir);
 
@@ -281,6 +285,7 @@ void init()
 	sphereContext.initFromOBJ(sphereModel);
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
+	textureAsteroidNormal = Core::LoadTexture("textures/asteroid_normals.png");
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		asteroidPositions[i] = glm::ballRand(10.f);
