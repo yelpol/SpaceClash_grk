@@ -1,11 +1,11 @@
 ﻿  main_8_3.cpp
   The contents of <filesystem> are available only with C++17 or later.
-C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(74,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(75,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(271,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\src\main_8_3.cpp(306,17): warning C4101: 'data': unreferenced local variable
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\src\main_8_3.cpp(75,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\src\main_8_3.cpp(76,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\src\main_8_3.cpp(275,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\src\main_8_3.cpp(311,17): warning C4101: 'data': unreferenced local variable
 Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
-PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
-PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
-PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
-  grk-cw8.vcxproj -> C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\grk-cw8.exe
+PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)' or at 'C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+  grk-cw8.vcxproj -> C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\Debug\grk-cw8.exe
