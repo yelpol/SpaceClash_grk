@@ -2,13 +2,13 @@
    All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <map>
 #include <set>
 #include <vector>
+#include "glm.hpp"
 
 namespace obj {
 
@@ -39,7 +40,9 @@ struct Model {
     std::vector<float> vertex; //< 3 * N entries
     std::vector<float> texCoord; //< 2 * N entries
     std::vector<float> normal; //< 3 * N entries
-    
+    std::vector<float> tangent; //< 3 * N entries
+    std::vector<float> bitangent; //< 3 * N entries
+
     std::map<std::string, std::vector<unsigned short> > faces; //< assume triangels and uniform indexing
 };
 
@@ -47,11 +50,11 @@ struct ObjModel {
     struct FaceVertex {
         FaceVertex() : v(-1), t(-1), n(-1) {}
         int v, t, n;
-        
+
         bool operator<( const FaceVertex & other ) const;
         bool operator==( const FaceVertex & other ) const;
     };
-    
+
     typedef std::pair<std::vector<FaceVertex>, std::vector<unsigned> > FaceList;
 
     std::vector<float> vertex; //< 3 * N entries
@@ -86,7 +89,7 @@ inline bool ObjModel::FaceVertex::operator==( const ObjModel::FaceVertex & other
 template <typename T>
 inline std::istream & operator>>(std::istream & in, std::vector<T> & vec ){
     T temp;
-    if(in >> temp) 
+    if(in >> temp)
         vec.push_back(temp);
     return in;
 }
@@ -94,7 +97,7 @@ inline std::istream & operator>>(std::istream & in, std::vector<T> & vec ){
 template <typename T>
 inline std::istream & operator>>(std::istream & in, std::set<T> & vec ){
     T temp;
-    if(in >> temp) 
+    if(in >> temp)
         vec.insert(temp);
     return in;
 }
@@ -150,7 +153,7 @@ ObjModel parseObjModel( std::istream & in ){
         else if(op == "f") {
             std::vector<ObjModel::FaceVertex> list;
             while(line_in >> list) ;
-            
+
             for(std::set<std::string>::const_iterator g = groups.begin(); g != groups.end(); ++g){
                 ObjModel::FaceList & fl = data.faces[*g];
                 fl.second.push_back(fl.first.size());
@@ -170,7 +173,7 @@ inline void tesselateObjModel( std::vector<ObjModel::FaceVertex> & input, std::v
     std::vector<unsigned> output_start;
     output.reserve(input.size());
     output_start.reserve(input_start.size());
-    
+
     for(std::vector<unsigned>::const_iterator s = input_start.begin(); s != input_start.end() - 1; ++s){
         const unsigned size = *(s+1) - *s;
         if(size > 3){
@@ -218,15 +221,74 @@ Model convertToModel( const ObjModel & obj ) {
         }
     }
     // look up unique index and transform face descriptions
-    for(std::map<std::string, ObjModel::FaceList>::const_iterator g = obj.faces.begin(); g != obj.faces.end(); ++g){
-        const std::string & name = g->first;
-        const ObjModel::FaceList & fl = g->second;
-        std::vector<unsigned short> & v = model.faces[g->first];
+    for (std::map<std::string, ObjModel::FaceList>::const_iterator g = obj.faces.begin(); g != obj.faces.end(); ++g) {
+        const std::string& name = g->first;
+        const ObjModel::FaceList& fl = g->second;
+        std::vector<unsigned short>& v = model.faces[g->first];
         v.reserve(fl.first.size());
-        for(std::vector<ObjModel::FaceVertex>::const_iterator f = fl.first.begin(); f != fl.first.end(); ++f){
+        for (std::vector<ObjModel::FaceVertex>::const_iterator f = fl.first.begin(); f != fl.first.end(); ++f) {
             const unsigned short index = std::distance(unique.begin(), std::lower_bound(unique.begin(), unique.end(), *f));
             v.push_back(index);
         }
+    }
+    // compute tangents
+    auto &indices = model.faces["default"];
+    model.tangent.resize(model.normal.size(), 0.f);
+    model.bitangent.resize(model.normal.size(), 0.f);
+    for (int i = 0; i < (int)indices.size(); i += 3)
+    {
+        auto &i0 = indices[i], &i1 = indices[i + 1], &i2 = indices[i + 2];
+        glm::vec3 v0(model.vertex[3*i0 + 0], model.vertex[3*i0 + 1], model.vertex[3*i0 + 2]);
+        glm::vec3 v1(model.vertex[3*i1 + 0], model.vertex[3*i1 + 1], model.vertex[3*i1 + 2]);
+        glm::vec3 v2(model.vertex[3*i2 + 0], model.vertex[3*i2 + 1], model.vertex[3*i2 + 2]);
+
+        glm::vec2 uv0(model.texCoord[2*i0 + 0], model.texCoord[2*i0 + 1]);
+        glm::vec2 uv1(model.texCoord[2*i1 + 0], model.texCoord[2*i1 + 1]);
+        glm::vec2 uv2(model.texCoord[2*i2 + 0], model.texCoord[2*i2 + 1]);
+
+        glm::vec3 deltaPos1 = v1 - v0;
+        glm::vec3 deltaPos2 = v2 - v0;
+
+        glm::vec2 deltaUV1 = uv1 - uv0;
+        glm::vec2 deltaUV2 = uv2 - uv0;
+
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
+        glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x)*r;
+
+        for (int j = 0; j < 3; j++)
+        {
+            model.tangent[3 * i0 + j] += tangent[j];
+            model.tangent[3 * i1 + j] += tangent[j];
+            model.tangent[3 * i2 + j] += tangent[j];
+
+            model.bitangent[3 * i0 + j] += bitangent[j];
+            model.bitangent[3 * i1 + j] += bitangent[j];
+            model.bitangent[3 * i2 + j] += bitangent[j];
+        }
+    }
+    for (auto &i : indices)
+    {
+        auto &tx = model.tangent[3 * i + 0];
+        auto &ty = model.tangent[3 * i + 1];
+        auto &tz = model.tangent[3 * i + 2];
+
+        auto &bx = model.bitangent[3 * i + 0];
+        auto &by = model.bitangent[3 * i + 1];
+        auto &bz = model.bitangent[3 * i + 2];
+
+        glm::vec3 n(model.normal[3 * i + 0], model.normal[3 * i + 1], model.normal[3 * i + 2]);
+        auto t = glm::normalize(glm::vec3(tx, ty, tz));
+        auto b = glm::normalize(glm::vec3(bx, by, bz));
+
+        t = glm::normalize(t - n * glm::dot(n, t));
+
+        if (glm::dot(glm::cross(n, t), b) < 0.0f) {
+            t = -t;
+        }
+
+        tx = t.x, ty = t.y, tz = t.z;
+        bx = b.x, by = b.y, bz = b.z;
     }
     return model;
 }

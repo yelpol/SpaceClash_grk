@@ -10,7 +10,7 @@ C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\grk-cw8.
 C:\Users\piotr\Desktop\grafika komputerowa\SpaceClash_grk\projekt\Debug\grk-cw8.pdb
 C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\grk-cw8.exe
 C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk\projekt\Debug\grk-cw8.pdb
-C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\grk-cw8.exe
-C:\Users\fanty\Documents\GRK\SpaceClash_grk\projekt\Debug\grk-cw8.pdb
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\Debug\grk-cw8.exe
+C:\Users\Yelyzaveta\Desktop\GRK\SpaceClash_grk_bump_mappin\projekt\Debug\grk-cw8.pdb
 C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\grk-cw8.exe
 C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\grk-cw8.pdb
