@@ -13,10 +13,10 @@ void main()
 {
 	//vec2 modifiedTexCoord = vec2(interpTexCoord.x, 1.0 - interpTexCoord.y);
 
-	vec3 L = normalize(lightDirTS);
+	vec3 L = normalize(-lightDirTS);
 	vec3 V = normalize(viewDirTS);
 	vec3 N = normalize((texture2D(normalSampler, interpTexCoord).rgb)*2-1);
-	vec3 R = reflect(normalize(L), N);
+	vec3 R = reflect(-normalize(L), N);
 
 	float diffuse = max(0, dot(N, L));
 
