@@ -90,6 +90,7 @@ GLuint programColor;
 GLuint programTexture;
 GLuint programSkybox;
 GLuint programSun;
+GLuint programParallax;
 
 Core::Shader_Loader shaderLoader;
 
@@ -114,9 +115,11 @@ struct Renderable {
 };
 std::vector<Renderable*> renderables;
 
+GLuint textureShip;
+GLuint textureShipNormal;
+GLuint textureShipDepth;
 
 GLuint textureAsteroid;
-GLuint textureShip;
 GLuint textureAsteroidNormal;
 static const int NUM_ASTEROIDS = 10;
 glm::vec3 asteroidPositions[NUM_ASTEROIDS];
@@ -345,7 +348,28 @@ void drawSkybox(unsigned int cubemapTexture)
 	glUseProgram(0);
 }
 
+void drawObjectParallax(Core::RenderContext* context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir, GLuint normalmapId, GLuint depthmapId)
+{
+	GLuint program = programParallax;
 
+	glUseProgram(program);
+
+	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
+	glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
+	Core::SetActiveTexture(normalmapId, "normalSampler", program, 1);
+	Core::SetActiveTexture(depthmapId, "depthSampler", program, 2);
+	//glUniform3f(glGetUniformLocation(program, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+
+	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
+
+	Core::DrawContext(*context);
+
+	glUseProgram(0);
+}
 
 void renderScene()
 {
@@ -371,7 +395,7 @@ void renderScene()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
-	
+
 	drawSkybox(cubemapTexture);
 
 	updateTransforms();
@@ -380,17 +404,10 @@ void renderScene()
 	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
 	shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 
-	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
-	// drawSun(&sphereModel, sunMatrix, textureSun);
 	glm::vec3 lightPos = glm::vec3(0, 0, 0);
 	glm::vec3 lightDir = glm::normalize(cameraPos - lightPos);
 
-	drawObjectTexture(&shipContext, shipModelMatrix, textureShip, lightDir, textureAsteroidNormal);
-
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
-
-	
-	drawObjectColor(&shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
+	drawObjectParallax(&shipContext, shipModelMatrix, textureShip, lightDir, textureShipNormal, textureShipDepth);
 
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
@@ -398,10 +415,8 @@ void renderScene()
 	}
 
 	glm::mat4 matrixSun = glm::translate(glm::vec3(0, 0, 0));
-	
+
 	drawSun(&sphereContext, matrixSun, textureSun, lightDir);
-	//glm::mat4 sunMatrix = glm::translate(lightPos);
-	//drawSun(&sphereModel, sunMatrix, textureSun);
 
 	// render models
 	for (Renderable* renderable : renderables) {
@@ -481,6 +496,7 @@ void init()
 	programTexture = shaderLoader.CreateProgram("shaders/shader_tex.vert", "shaders/shader_tex.frag");
 	programSkybox = shaderLoader.CreateProgram("shaders/shader_sky.vert", "shaders/shader_sky.frag");
 	programSun = shaderLoader.CreateProgram("shaders/shader_4_sun.vert", "shaders/shader_4_sun.frag");
+	programParallax = shaderLoader.CreateProgram("shaders/shader_tex_parallax.vert", "shaders/shader_tex_parallax.frag");
 
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
@@ -489,10 +505,13 @@ void init()
 	sphereContext.initFromOBJ(sphereModel);
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
-	textureShip = Core::LoadTexture("textures/ShipTexture.png");
+	textureShip = Core::LoadTexture("textures/ship.png");
 	textureSun = Core::LoadTexture("textures/sun.png");
 	textureBullet = Core::LoadTexture("textures/green.jpg");
 
+	textureShipNormal = Core::LoadTexture("textures/ship_normals.png");
+	textureShipDepth = Core::LoadTexture("textures/ship_deplacement.png");
+	
 	textureAsteroidNormal = Core::LoadTexture("textures/asteroid_normals.png");
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
@@ -549,6 +568,7 @@ void shutdown()
 	shaderLoader.DeleteProgram(programTexture);
 	shaderLoader.DeleteProgram(programSkybox);
 	shaderLoader.DeleteProgram(programSun);
+	shaderLoader.DeleteProgram(programParallax);
 }
 
 void idle()
