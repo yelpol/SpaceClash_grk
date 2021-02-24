@@ -100,5 +100,11 @@
     <None Include="shaders\shader_tex.vert">
       <Filter>Shader Files</Filter>
     </None>
+    <None Include="shaders\shader_tex_parallax.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="shaders\shader_tex_parallax.vert">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 ﻿  main_8_3.cpp
   The contents of <filesystem> are available only with C++17 or later.
-C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(162,61): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
-C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(478,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(519,17): warning C4101: 'data': unreferenced local variable
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(165,61): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(493,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(538,17): warning C4101: 'data': unreferenced local variable
 Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
 PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
 PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info

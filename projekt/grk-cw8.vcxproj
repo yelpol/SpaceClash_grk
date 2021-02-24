@@ -40,12 +40,14 @@
     <None Include="shaders\shader_color.vert" />
     <None Include="shaders\shader_tex.frag" />
     <None Include="shaders\shader_tex.vert" />
+    <None Include="shaders\shader_tex_parallax.frag" />
+    <None Include="shaders\shader_tex_parallax.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1B448102-E76C-4347-BDC7-40D02A567DB6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>grk-cw8</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectName>grk-cw8</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -77,11 +79,13 @@
     <LibraryPath>$(SolutionDir)dependencies\freeglut\lib;$(SolutionDir)dependencies\glew-2.0.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)dependencies\freeglut\include\GL;$(SolutionDir)dependencies\glew-2.0.0\include\GL;$(SolutionDir)dependencies\glm;$(IncludePath)</IncludePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)dependencies\freeglut\include\GL;$(SolutionDir)dependencies\glew-2.0.0\include\GL;$(SolutionDir)dependencies\glm;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependencies\freeglut\lib;$(SolutionDir)dependencies\glew-2.0.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
