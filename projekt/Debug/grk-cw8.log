@@ -1,12 +1,12 @@
 ﻿  main_8_3.cpp
   The contents of <filesystem> are available only with C++17 or later.
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(163,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(168,66): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(178,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(182,66): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(202,62): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(543,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(591,17): warning C4101: "data": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(194,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(199,66): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(209,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(213,66): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(224,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(590,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(638,17): warning C4101: "data": lokalna zmienna, do której nie istnieje odwołanie
 Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
 PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
 PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
