@@ -95,8 +95,8 @@ GLuint programParallax;
 Core::Shader_Loader shaderLoader;
 
 // physx
-obj::Model planeModel, boxModel, sphereModel, shipModel;
-Core::RenderContext planeContext, boxContext, sphereContext, shipContext;
+obj::Model planeModel, boxModel, sphereModel, shipModel, bulletModel;
+Core::RenderContext planeContext, boxContext, sphereContext, shipContext, bulletContext;
 GLuint boxTexture, groundTexture, shipTexture, textureBullet;
 
 // physical objects
@@ -122,7 +122,7 @@ GLuint textureShipDepth;
 GLuint textureAsteroid;
 GLuint textureAsteroidNormal;
 static const int NUM_ASTEROIDS = 10;
-glm::vec3 asteroidPositions[NUM_ASTEROIDS];
+PxVec3 asteroidPositions[NUM_ASTEROIDS];
 
 GLuint textureSun;
 glm::vec3 sunPosition = glm::vec3(0);
@@ -149,27 +149,24 @@ float cameraAngle = 0;
 
 
 
-void initBullet()
+void initBullets()
 {
+	for (int i = 0; i < 2; i++) {
 		Renderable* sphere = new Renderable();
-		sphere->context = &sphereContext;
+		sphere->context = &bulletContext;
 		sphere->textureId = textureBullet;
 		renderables.emplace_back(sphere);
-
-
+	}
 }
 
-void initPhysicsScene(GLuint i)
-{
-
+void initRightBulletPhysicsScene(GLuint i) {
 	boxMaterial = pxScene.physics->createMaterial(0.5, 0.5, 0.6);
-
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(0, -0.25f, 0))  * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
-
+	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(0, -0.25f, 0))  * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
+	glm::mat4 rightBulletModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(0.15f, -0.25f, -0.1f)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
 	PxShape* sphereShape;
-	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&shipModelMatrix)));
-	sphereShape = pxScene.physics->createShape(PxSphereGeometry(5.0), *boxMaterial);
-	sphereBody->setLinearVelocity(PxVec3(5 *cameraDir.x, 5 *cameraDir.y, 5 *cameraDir.z));
+	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&rightBulletModelMatrix)));
+	sphereShape = pxScene.physics->createShape(PxSphereGeometry(0.05), *boxMaterial);
+	sphereBody->setLinearVelocity(PxVec3(15 * cameraDir.x, 15 * cameraDir.y, 15 * cameraDir.z));
 	sphereBody->attachShape(*sphereShape);
 	sphereBody->setName("sphere");
 	sphereShape->release();
@@ -177,10 +174,63 @@ void initPhysicsScene(GLuint i)
 	pxScene.scene->addActor(*sphereBody);
 }
 
+void initLeftBulletPhysicsScene(GLuint i) {
+	boxMaterial = pxScene.physics->createMaterial(0.5, 0.5, 0.6);
+	glm::mat4 leftBulletModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(-0.15f, -0.25f, -0.1f)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
+	PxShape* sphereShape;
+	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&leftBulletModelMatrix)));
+	sphereShape = pxScene.physics->createShape(PxSphereGeometry(0.05), *boxMaterial);
+	sphereBody->setLinearVelocity(PxVec3(15 * cameraDir.x, 15 * cameraDir.y, 15 * cameraDir.z));
+	sphereBody->attachShape(*sphereShape);
+	sphereBody->setName("sphere");
+	sphereShape->release();
+	sphereBody->userData = (void*)renderables[i];
+	pxScene.scene->addActor(*sphereBody);
+}
+
+void initPhysicsScene()
+{
+
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		glm::vec3 a = glm::vec3(glm::ballRand(10.0));
+		asteroidPositions[i] = PxVec3(a.x, a.y, a.z);
+	}
+
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		boxMaterial = pxScene.physics->createMaterial(0.5, 0.5, 0.6);
+		//glm::mat4 leftBulletModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(-0.2f, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
+		PxShape* sphereShape;
+		sphereBody = pxScene.physics->createRigidDynamic(PxTransform(asteroidPositions[i]));
+		sphereShape = pxScene.physics->createShape(PxSphereGeometry(1), *boxMaterial);
+		//sphereBody->setLinearVelocity(PxVec3(15 * cameraDir.x, 15 * cameraDir.y, 15 * cameraDir.z));
+		sphereBody->attachShape(*sphereShape);
+		sphereBody->setName("sphere");
+		sphereShape->release();
+		sphereBody->userData = (void*)renderables[i];
+		pxScene.scene->addActor(*sphereBody);
+	}
+}
+
+
+void initRenderables() {
+	// asteroids
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		Renderable* asteroid = new Renderable();
+		asteroid->context = &sphereContext;
+		asteroid->textureId = textureAsteroid;
+		renderables.emplace_back(asteroid);
+		//asteroidPositions[i] = glm::ballRand(10.f);
+	}
+}
+
 void shoot() {
-	initBullet();
+	initBullets();
 	int count = renderables.size();
-	initPhysicsScene(count - 1);
+	initRightBulletPhysicsScene(count - 1);
+	initLeftBulletPhysicsScene(count - 2);
 }
 
 void updateTransforms()
@@ -248,8 +298,6 @@ void mouse(int x, int y)
 	pitch += yoffset;
 }
 
-/// Assimp plane obeject
-
 
 glm::mat4 createCameraMatrix()
 {
@@ -307,6 +355,29 @@ void drawObjectTexture(Core::RenderContext* context, glm::mat4 modelMatrix, GLui
 	glUseProgram(0);
 }
 
+void drawObjectParallax(Core::RenderContext* context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir, GLuint normalmapId, GLuint depthmapId)
+{
+	GLuint program = programParallax;
+
+	glUseProgram(program);
+
+	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
+	glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
+	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
+	Core::SetActiveTexture(normalmapId, "normalSampler", program, 1);
+	Core::SetActiveTexture(depthmapId, "depthSampler", program, 2);
+	//glUniform3f(glGetUniformLocation(program, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+
+	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
+	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
+
+	Core::DrawContext(*context);
+
+	glUseProgram(0);
+}
+
 void drawSun(Core::RenderContext* context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
 {
 	GLuint program = programSun;
@@ -348,32 +419,10 @@ void drawSkybox(unsigned int cubemapTexture)
 	glUseProgram(0);
 }
 
-void drawObjectParallax(Core::RenderContext* context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir, GLuint normalmapId, GLuint depthmapId)
-{
-	GLuint program = programParallax;
 
-	glUseProgram(program);
-
-	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
-	glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
-
-	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
-	Core::SetActiveTexture(normalmapId, "normalSampler", program, 1);
-	Core::SetActiveTexture(depthmapId, "depthSampler", program, 2);
-	//glUniform3f(glGetUniformLocation(program, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-
-	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
-	glUniformMatrix4fv(glGetUniformLocation(program, "modelViewProjectionMatrix"), 1, GL_FALSE, (float*)&transformation);
-	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, GL_FALSE, (float*)&modelMatrix);
-
-	Core::DrawContext(*context);
-
-	glUseProgram(0);
-}
 
 void renderScene()
 {
-
 	double time = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
 	static double prevTime = time;
 	double dtime = time - prevTime;
@@ -383,13 +432,11 @@ void renderScene()
 	if (dtime < 1.f) {
 		physicsTimeToProcess += dtime;
 		while (physicsTimeToProcess > 0) {
-			// here we perform the physics simulation step
 			pxScene.step(physicsStepTime);
 			physicsTimeToProcess -= physicsStepTime;
 		}
 	}
 
-	// Aktualizacja macierzy widoku i rzutowania
 	cameraMatrix = createCameraMatrix();
 	perspectiveMatrix = Core::createPerspectiveMatrix();
 
@@ -400,30 +447,33 @@ void renderScene()
 
 	updateTransforms();
 
-	shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
-	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
-	shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
-
 	glm::vec3 lightPos = glm::vec3(0, 0, 0);
 	glm::vec3 lightDir = glm::normalize(cameraPos - lightPos);
 
+
+	// render ship
+	shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
+	shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 	drawObjectParallax(&shipContext, shipModelMatrix, textureShip, lightDir, textureShipNormal, textureShipDepth);
 
-	for (int i = 0; i < NUM_ASTEROIDS; i++)
+
+	// render asteroids
+	/*for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		drawObjectTexture(&sphereContext, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir, textureAsteroidNormal);
-	}
+	}*/
 
+
+	// render sun
 	glm::mat4 matrixSun = glm::translate(glm::vec3(0, 0, 0));
-
 	drawSun(&sphereContext, matrixSun, textureSun, lightDir);
 
-	// render models
+
+	// render renderables: bullets, asteroids
 	for (Renderable* renderable : renderables) {
 		drawObjectTexture(renderable->context, renderable->modelMatrix, renderable->textureId, lightDir, textureAsteroidNormal);
 		//std::cout << renderable->context;
 	}
-
 
 	glutSwapBuffers();
 }
@@ -500,9 +550,12 @@ void init()
 
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
+	bulletModel = obj::loadModelFromFile("models/bullet.obj");
 
-	shipContext.initFromOBJ(shipModel);
+	
 	sphereContext.initFromOBJ(sphereModel);
+	shipContext.initFromOBJ(shipModel);
+	bulletContext.initFromOBJ(bulletModel);
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
 	textureShip = Core::LoadTexture("textures/ship.png");
@@ -511,14 +564,14 @@ void init()
 
 	textureShipNormal = Core::LoadTexture("textures/ship_normals.png");
 	textureShipDepth = Core::LoadTexture("textures/ship_deplacement.png");
-	
+
 	textureAsteroidNormal = Core::LoadTexture("textures/asteroid_normals.png");
-	for (int i = 0; i < NUM_ASTEROIDS; i++)
-	{
-		asteroidPositions[i] = glm::ballRand(10.f);
-	}
 
 	textureSun = Core::LoadTexture("textures/sun.png");
+
+	initRenderables();
+	initPhysicsScene();
+
 
 	std::vector<std::string> faces
 	{
