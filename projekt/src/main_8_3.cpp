@@ -119,7 +119,7 @@ GLuint textureAsteroid;
 GLuint textureShip;
 GLuint textureAsteroidNormal;
 static const int NUM_ASTEROIDS = 10;
-glm::vec3 asteroidPositions[NUM_ASTEROIDS];
+PxVec3 asteroidPositions[NUM_ASTEROIDS];
 
 GLuint textureSun;
 glm::vec3 sunPosition = glm::vec3(0);
@@ -130,7 +130,6 @@ unsigned int skyboxVAO, skyboxVBO;
 
 glm::mat4 shipModelMatrix;
 glm::mat4 shipInitialTransformation;
-// glm::vec3 lightPos = glm::vec3(0, 0, 0);
 
 
 // camera + keyboard + mouse
@@ -185,16 +184,50 @@ void initLeftBulletPhysicsScene(GLuint i) {
 	pxScene.scene->addActor(*sphereBody);
 }
 
-void initPhysicsScene(GLuint i, GLuint j)
+void initPhysicsScene()
 {
-	initRightBulletPhysicsScene(i);
-	initLeftBulletPhysicsScene(j);
+
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		glm::vec3 a = glm::vec3(glm::ballRand(10.0));
+		asteroidPositions[i] = PxVec3(a.x, a.y, a.z);
+	}
+
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		boxMaterial = pxScene.physics->createMaterial(0.5, 0.5, 0.6);
+		//glm::mat4 leftBulletModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(-0.2f, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
+		PxShape* sphereShape;
+		sphereBody = pxScene.physics->createRigidDynamic(PxTransform(asteroidPositions[i]));
+		sphereShape = pxScene.physics->createShape(PxSphereGeometry(1), *boxMaterial);
+		//sphereBody->setLinearVelocity(PxVec3(15 * cameraDir.x, 15 * cameraDir.y, 15 * cameraDir.z));
+		sphereBody->attachShape(*sphereShape);
+		sphereBody->setName("sphere");
+		sphereShape->release();
+		sphereBody->userData = (void*)renderables[i];
+		pxScene.scene->addActor(*sphereBody);
+	}
+}
+
+
+void initRenderables() {
+	// asteroids
+	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	{
+		Renderable* asteroid = new Renderable();
+		asteroid->context = &sphereContext;
+		asteroid->textureId = textureAsteroid;
+		renderables.emplace_back(asteroid);
+		//asteroidPositions[i] = glm::ballRand(10.f);
+	}
+
 }
 
 void shoot() {
 	initBullets();
 	int count = renderables.size();
-	initPhysicsScene(count - 1, count - 2);
+	initRightBulletPhysicsScene(count - 1);
+	initLeftBulletPhysicsScene(count - 2);
 }
 
 void updateTransforms()
@@ -262,8 +295,6 @@ void mouse(int x, int y)
 	pitch += yoffset;
 }
 
-/// Assimp plane obeject
-
 
 glm::mat4 createCameraMatrix()
 {
@@ -324,12 +355,9 @@ void drawObjectTexture(Core::RenderContext* context, glm::mat4 modelMatrix, GLui
 void drawSun(Core::RenderContext* context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir)
 {
 	GLuint program = programSun;
-
 	glUseProgram(program);
-
 	Core::SetActiveTexture(textureId, "textureSampler", program, 0);
 	glUniform3f(glGetUniformLocation(program, "cameraPos"), cameraPos.x, cameraPos.y, cameraPos.z);
-
 	glUniform3f(glGetUniformLocation(program, "lightDir"), lightDir.x, lightDir.y, lightDir.z);
 
 	glm::mat4 transformation = perspectiveMatrix * cameraMatrix * modelMatrix;
@@ -366,7 +394,6 @@ void drawSkybox(unsigned int cubemapTexture)
 
 void renderScene()
 {
-
 	double time = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
 	static double prevTime = time;
 	double dtime = time - prevTime;
@@ -393,34 +420,32 @@ void renderScene()
 
 	updateTransforms();
 
-	shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
-	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
-	shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
-
-	// glm::mat4 sunMatrix = glm::translate(glm::vec3(0, 0, 0));
-	// drawSun(&sphereModel, sunMatrix, textureSun);
 	glm::vec3 lightPos = glm::vec3(0, 0, 0);
 	glm::vec3 lightDir = glm::normalize(cameraPos - lightPos);
 
+
+	// render spaceship
+	shipInitialTransformation = glm::translate(glm::vec3(0, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
+	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::rotate(-cameraAngle, glm::vec3(0,1,0)) * shipInitialTransformation;
+	shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
 	drawObjectTexture(&shipContext, shipModelMatrix, textureShip, lightDir, textureAsteroidNormal);
 
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
+	// TODO: zakomentowa?em drugie rysowanie statku bo wydaje mi si?, ?e to b??d - je?li tak to do usuni?cia
+	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * shipInitialTransformation;
+	//drawObjectColor(&shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
 
-	
-	drawObjectColor(&shipContext, shipModelMatrix, glm::vec3(0.65f, 0.36f, 0.57f), lightDir);
 
-	for (int i = 0; i < NUM_ASTEROIDS; i++)
+	// render asteroids
+	/*for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		drawObjectTexture(&sphereContext, glm::translate(asteroidPositions[i]), textureAsteroid, lightDir, textureAsteroidNormal);
-	}
+	}*/
 
+	// render sun
 	glm::mat4 matrixSun = glm::translate(glm::vec3(0, 0, 0));
-	
 	drawSun(&sphereContext, matrixSun, textureSun, lightDir);
-	//glm::mat4 sunMatrix = glm::translate(lightPos);
-	//drawSun(&sphereModel, sunMatrix, textureSun);
 
-	// render models
+	// render bullets
 	for (Renderable* renderable : renderables) {
 		drawObjectTexture(renderable->context, renderable->modelMatrix, renderable->textureId, lightDir, textureAsteroidNormal);
 		//std::cout << renderable->context;
@@ -513,12 +538,11 @@ void init()
 	textureBullet = Core::LoadTexture("textures/green.jpg");
 
 	textureAsteroidNormal = Core::LoadTexture("textures/asteroid_normals.png");
-	for (int i = 0; i < NUM_ASTEROIDS; i++)
-	{
-		asteroidPositions[i] = glm::ballRand(10.f);
-	}
 
 	textureSun = Core::LoadTexture("textures/sun.png");
+
+	initRenderables();
+	initPhysicsScene();
 
 	std::vector<std::string> faces
 	{
