@@ -146,27 +146,24 @@ float cameraAngle = 0;
 
 
 
-void initBullet()
+void initBullets()
 {
+	for (int i = 0; i < 2; i++) {
 		Renderable* sphere = new Renderable();
 		sphere->context = &bulletContext;
 		sphere->textureId = textureBullet;
 		renderables.emplace_back(sphere);
-
-
+	}
 }
 
-void initPhysicsScene(GLuint i)
-{
-
+void initRightBulletPhysicsScene(GLuint i) {
 	boxMaterial = pxScene.physics->createMaterial(0.5, 0.5, 0.6);
-
-	glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(0, -0.25f, 0))  * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
-
+	//glm::mat4 shipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(0, -0.25f, 0))  * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
+	glm::mat4 rightBulletModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(0.2f, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
 	PxShape* sphereShape;
-	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&shipModelMatrix)));
+	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&rightBulletModelMatrix)));
 	sphereShape = pxScene.physics->createShape(PxSphereGeometry(0.05), *boxMaterial);
-	sphereBody->setLinearVelocity(PxVec3(5 *cameraDir.x, 5 *cameraDir.y, 5 *cameraDir.z));
+	sphereBody->setLinearVelocity(PxVec3(15 * cameraDir.x, 15 * cameraDir.y, 15 * cameraDir.z));
 	sphereBody->attachShape(*sphereShape);
 	sphereBody->setName("sphere");
 	sphereShape->release();
@@ -174,10 +171,30 @@ void initPhysicsScene(GLuint i)
 	pxScene.scene->addActor(*sphereBody);
 }
 
+void initLeftBulletPhysicsScene(GLuint i) {
+	boxMaterial = pxScene.physics->createMaterial(0.5, 0.5, 0.6);
+	glm::mat4 leftBulletModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f) * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::vec3(-0.2f, -0.25f, 0)) * glm::rotate(glm::radians(180.0f), glm::vec3(0, 1, 0) * rotation);
+	PxShape* sphereShape;
+	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&leftBulletModelMatrix)));
+	sphereShape = pxScene.physics->createShape(PxSphereGeometry(0.05), *boxMaterial);
+	sphereBody->setLinearVelocity(PxVec3(15 * cameraDir.x, 15 * cameraDir.y, 15 * cameraDir.z));
+	sphereBody->attachShape(*sphereShape);
+	sphereBody->setName("sphere");
+	sphereShape->release();
+	sphereBody->userData = (void*)renderables[i];
+	pxScene.scene->addActor(*sphereBody);
+}
+
+void initPhysicsScene(GLuint i, GLuint j)
+{
+	initRightBulletPhysicsScene(i);
+	initLeftBulletPhysicsScene(j);
+}
+
 void shoot() {
-	initBullet();
+	initBullets();
 	int count = renderables.size();
-	initPhysicsScene(count - 1);
+	initPhysicsScene(count - 1, count - 2);
 }
 
 void updateTransforms()
