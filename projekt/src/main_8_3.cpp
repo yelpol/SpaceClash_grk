@@ -94,8 +94,8 @@ GLuint programSun;
 Core::Shader_Loader shaderLoader;
 
 // physx
-obj::Model planeModel, boxModel, sphereModel, shipModel;
-Core::RenderContext planeContext, boxContext, sphereContext, shipContext;
+obj::Model planeModel, boxModel, sphereModel, shipModel, bulletModel;
+Core::RenderContext planeContext, boxContext, sphereContext, shipContext, bulletContext;
 GLuint boxTexture, groundTexture, shipTexture, textureBullet;
 
 // physical objects
@@ -149,7 +149,7 @@ float cameraAngle = 0;
 void initBullet()
 {
 		Renderable* sphere = new Renderable();
-		sphere->context = &sphereContext;
+		sphere->context = &bulletContext;
 		sphere->textureId = textureBullet;
 		renderables.emplace_back(sphere);
 
@@ -165,7 +165,7 @@ void initPhysicsScene(GLuint i)
 
 	PxShape* sphereShape;
 	sphereBody = pxScene.physics->createRigidDynamic(PxTransform(PxMat44((float*)&shipModelMatrix)));
-	sphereShape = pxScene.physics->createShape(PxSphereGeometry(5.0), *boxMaterial);
+	sphereShape = pxScene.physics->createShape(PxSphereGeometry(0.05), *boxMaterial);
 	sphereBody->setLinearVelocity(PxVec3(5 *cameraDir.x, 5 *cameraDir.y, 5 *cameraDir.z));
 	sphereBody->attachShape(*sphereShape);
 	sphereBody->setName("sphere");
@@ -484,9 +484,11 @@ void init()
 
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
+	bulletModel = obj::loadModelFromFile("models/bullet.obj");
 
 	shipContext.initFromOBJ(shipModel);
 	sphereContext.initFromOBJ(sphereModel);
+	bulletContext.initFromOBJ(bulletModel);
 
 	textureAsteroid = Core::LoadTexture("textures/asteroid.png");
 	textureShip = Core::LoadTexture("textures/ShipTexture.png");
