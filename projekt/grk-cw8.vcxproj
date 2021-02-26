@@ -101,7 +101,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXExtensions_static_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysX_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXPvdSDK_static_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXVehicle_static_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXCharacterKinematic_static_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXCooking_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXCommon_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\SnippetUtils_static_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\SnippetRender_static_32.lib;dependencies\physx-4.1\lib\win.x86_32.vc141.mt\debug\PhysXFoundation_32.lib;assimp-vc140-mt.lib;opengl32.lib;freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\dependencies\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Piotr\Desktop\grafika komputerowa\project\SpaceClash_grk\projekt\dependencies\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>

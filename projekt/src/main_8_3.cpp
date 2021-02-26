@@ -134,7 +134,7 @@ GLuint boxTexture, groundTexture, shipTexture, textureBullet;
 // physical objects
 PxRigidDynamic* sphereBody;
 PxRigidDynamic* shipBody;
-PxRigidStatic* asteroidBody;
+PxRigidDynamic* asteroidBody;
 PxMaterial* shipMaterial = nullptr;
 std::vector<PxRigidDynamic*> boxBodies;
 PxMaterial* boxMaterial = nullptr;
@@ -228,8 +228,8 @@ void initPhysicsScene()
 	for (int i = 0; i < NUM_ASTEROIDS; i++)
 	{
 		PxShape* sphereShape;
-		//sphereBody = pxScene.physics->createRigidDynamic(PxTransform(asteroidPositions[i]));
-		asteroidBody = pxScene.physics->createRigidStatic(PxTransform(asteroidPositions[i]));
+		asteroidBody = pxScene.physics->createRigidDynamic(PxTransform(asteroidPositions[i]));
+		//asteroidBody = pxScene.physics->createRigidStatic(PxTransform(asteroidPositions[i]));
 		sphereShape = pxScene.physics->createShape(PxSphereGeometry(1), *boxMaterial);
 		asteroidBody->attachShape(*sphereShape);
 		asteroidBody->setName("asteroid");
