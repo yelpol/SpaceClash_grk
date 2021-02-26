@@ -1,16 +1,18 @@
-﻿  Camera.cpp
-  main_8_3.cpp
+﻿  main_8_3.cpp
   The contents of <filesystem> are available only with C++17 or later.
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(210,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(269,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(274,66): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(284,61): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(288,66): warning C4305: "argument": obcięcie z "double" do "physx::PxReal"
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(591,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\src\main_8_3.cpp(639,17): warning C4101: "data": lokalna zmienna, do której nie istnieje odwołanie
-  Generowanie kodu...
-Camera.obj : warning LNK4075: zignorowano opcję „/EDITANDCONTINUE” z powodu określenia opcji „/INCREMENTAL:NO”
-PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
-PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
-PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: nie znaleziono pliku PDB „PhysXExtensions_static_32.pdb” z elementem „PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)” lub w pozycji „C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb”; obiekt zostanie skonsolidowany bez informacji debugowania
-  grk-cw8.vcxproj -> C:\Users\piotr\Desktop\grafika komputerowa\PROJEKT\SpaceClash_grk\projekt\Debug\grk-cw8.exe
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(178,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(179,18): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(218,61): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(277,61): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(282,66): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(292,61): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(296,66): warning C4305: 'argument': truncation from 'double' to 'physx::PxReal'
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(391,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(392,10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(632,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\src\main_8_3.cpp(680,17): warning C4101: 'data': unreferenced local variable
+Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: PDB 'PhysXExtensions_static_32.pdb' was not found with 'PhysXExtensions_static_32.lib(ExtDefaultErrorCallback.obj)' or at 'C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\Debug\PhysXExtensions_static_32.pdb'; linking object as if no debug info
+  grk-cw8.vcxproj -> C:\Users\Yelyzaveta\Desktop\grk_check\SpaceClash_grk\projekt\Debug\grk-cw8.exe
