@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iostream>
 
+#include "glew.h"
+#include "freeglut.h"
+
 class Shader
 {
 public:

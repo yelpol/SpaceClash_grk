@@ -8,6 +8,7 @@
 
 #include <filesystem>
 
+#include "Shader.h"
 #include "Shader_Loader.h"
 #include "Render_Utils.h"
 #include "Camera.h"
@@ -87,8 +88,6 @@ GLuint programColor;
 GLuint programTexture;
 GLuint programSkybox;
 // GLuint programSun; //próba stworznia osobnych shaderów do s?o?ca, jak w cw.4 (w trakcie)
-
-Core::Shader_Loader shaderLoader;
 
 // physx
 obj::Model planeModel, boxModel, sphereModel, shipModel;
@@ -463,11 +462,15 @@ void initSkybox() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 }
 
+//Shader shaderLoader;
+//*************tutaj
 void init()
 {
 	srand(time(0));
 	glEnable(GL_DEPTH_TEST);
-	programColor = shaderLoader.CreateProgram("shaders/shader_color.vert", "shaders/shader_color.frag");
+	Shader shaderLoader("shaders/shader_color.vert", "shaders/shader_color.frag");
+	programColor = shaderLoader;
+
 	programTexture = shaderLoader.CreateProgram("shaders/shader_tex.vert", "shaders/shader_tex.frag");
 	programSkybox = shaderLoader.CreateProgram("shaders/shader_sky.vert", "shaders/shader_sky.frag");
 	//programSun = shaderLoader.CreateProgram("shaders/shader_4_sun.vert", "shaders/shader_4_sun.frag");
