@@ -124,6 +124,7 @@ GLuint programSun;
 GLuint programParallax;
 
 Core::Shader_Loader shaderLoader;
+float frustumScale = 1.f;
 
 // physx
 obj::Model planeModel, boxModel, sphereModel, shipModel, bulletModel;
@@ -491,7 +492,7 @@ void renderScene()
 	}
 
 	cameraMatrix = createCameraMatrix();
-	perspectiveMatrix = Core::createPerspectiveMatrix();
+	perspectiveMatrix = Core::createPerspectiveMatrix(0.1f, 100.0f, frustumScale);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
@@ -676,6 +677,13 @@ void idle()
 	glutPostRedisplay();
 }
 
+void onReshape(int width, int height)
+{
+	frustumScale = (float)width / height;
+
+	glViewport(0, 0, width, height);
+}
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
@@ -690,6 +698,7 @@ int main(int argc, char** argv)
 	glutPassiveMotionFunc(mouse);
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(idle);
+	glutReshapeFunc(onReshape);
 
 	glutMainLoop();
 
