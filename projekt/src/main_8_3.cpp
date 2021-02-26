@@ -171,10 +171,10 @@ glm::mat4 shipInitialTransformation;
 
 // camera + keyboard + mouse
 glm::mat4 cameraMatrix, perspectiveMatrix;
-//float lastX = 300.0f, lastY = 300.0f;
-//float yaw = 0.0f;
-//float pitch = 0.0f;
-//glm::quat rotation = glm::quat(1, 0, 0, 0);
+float lastX = 300.0f, lastY = 300.0f;
+float yaw = 0.0f;
+float pitch = 0.0f;
+glm::quat rotation = glm::quat(1, 0, 0, 0);
 float xprev = 0.1;
 float yprev = 0.1;
 
@@ -182,7 +182,7 @@ float xdiff = 0.0f;
 float ydiff = 0.0f;
 float zdiff = 0.0f;
 
-glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+//glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 glm::vec3 cameraPos = glm::vec3(-5, 0, 0);
 glm::vec3 cameraDir; // Wektor "do przodu" kamery
 glm::vec3 cameraSide; // Wektor "w bok" kamery
@@ -369,65 +369,65 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
-//void mouse(int x, int y)
-//{
-//	float xoffset = x - lastX;
-//	float yoffset = y - lastY;
-//	lastX = (float)x;
-//	lastY = (float)y;
-//
-//	const float sen = 0.00001f;
-//	xoffset *= sen;
-//	yoffset *= sen;
-//
-//	yaw += xoffset;
-//	pitch += yoffset;
-//}
 void mouse(int x, int y)
 {
-	xdiff = x - xprev;
-	ydiff = y - yprev;
+	float xoffset = x - lastX;
+	float yoffset = y - lastY;
+	lastX = (float)x;
+	lastY = (float)y;
 
-	xprev = x;
-	yprev = y;
+	const float sen = 0.00001f;
+	xoffset *= sen;
+	yoffset *= sen;
+
+	yaw += xoffset;
+	pitch += yoffset;
 }
-
-
-//glm::mat4 createCameraMatrix()
+//void mouse(int x, int y)
 //{
-//	glm::quat rotationAboutX = glm::angleAxis(pitch, glm::vec3(1, 0, 0));
-//	glm::quat rotationAboutY = glm::angleAxis(yaw, glm::vec3(0, 1, 0));
-//	glm::quat rotationChange = rotationAboutX * rotationAboutY;
-//	rotation = glm::normalize(rotationChange * rotation);
+//	xdiff = x - xprev;
+//	ydiff = y - yprev;
 //
-//	cameraDir = glm::inverse(rotation) * glm::vec3(0, 0, -1);
-//	glm::vec3 up = glm::vec3(0, 1, 0);
-//	cameraSide = glm::cross(cameraDir, up);
-//	return Core::createViewMatrixQuat(cameraPos, rotation);
+//	xprev = x;
+//	yprev = y;
 //}
+
+
 glm::mat4 createCameraMatrix()
 {
-	// cameraDir = glm::vec3(cosf(cameraAngle - glm::radians(90.0f)), 0.0f, sinf(cameraAngle - glm::radians(90.0f)));
-	// glm::vec3 up = glm::vec3(0, 1, 0);
-	// cameraSide = glm::cross(cameraDir, up);
-	//
-	// return Core::createViewMatrix(cameraPos, cameraDir, up);
-	glm::quat rotationX = glm::angleAxis(xdiff * 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::quat rotationY = glm::angleAxis(ydiff * 0.01f, glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::quat rotationZ = glm::angleAxis(zdiff, glm::vec3(0.0f, 0.0f, 1.0f));
-
-
-	glm::quat rotationChange = rotationX * rotationY * rotationZ;
+	glm::quat rotationAboutX = glm::angleAxis(pitch, glm::vec3(1, 0, 0));
+	glm::quat rotationAboutY = glm::angleAxis(yaw, glm::vec3(0, 1, 0));
+	glm::quat rotationChange = rotationAboutX * rotationAboutY;
 	rotation = glm::normalize(rotationChange * rotation);
 
-	xdiff = 0;
-	ydiff = 0;
-	zdiff = 0;
-
 	cameraDir = glm::inverse(rotation) * glm::vec3(0, 0, -1);
-	cameraSide = glm::inverse(rotation) * glm::vec3(1, 0, 0);
+	glm::vec3 up = glm::vec3(0, 1, 0);
+	cameraSide = glm::cross(cameraDir, up);
 	return Core::createViewMatrixQuat(cameraPos, rotation);
 }
+//glm::mat4 createCameraMatrix()
+//{
+//	// cameraDir = glm::vec3(cosf(cameraAngle - glm::radians(90.0f)), 0.0f, sinf(cameraAngle - glm::radians(90.0f)));
+//	// glm::vec3 up = glm::vec3(0, 1, 0);
+//	// cameraSide = glm::cross(cameraDir, up);
+//	//
+//	// return Core::createViewMatrix(cameraPos, cameraDir, up);
+//	glm::quat rotationX = glm::angleAxis(xdiff * 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
+//	glm::quat rotationY = glm::angleAxis(ydiff * 0.01f, glm::vec3(1.0f, 0.0f, 0.0f));
+//	glm::quat rotationZ = glm::angleAxis(zdiff, glm::vec3(0.0f, 0.0f, 1.0f));
+//
+//
+//	glm::quat rotationChange = rotationX * rotationY * rotationZ;
+//	rotation = glm::normalize(rotationChange * rotation);
+//
+//	xdiff = 0;
+//	ydiff = 0;
+//	zdiff = 0;
+//
+//	cameraDir = glm::inverse(rotation) * glm::vec3(0, 0, -1);
+//	cameraSide = glm::inverse(rotation) * glm::vec3(1, 0, 0);
+//	return Core::createViewMatrixQuat(cameraPos, rotation);
+//}
 
 void drawObjectTexture(Core::RenderContext* context, glm::mat4 modelMatrix, GLuint textureId, glm::vec3 lightDir, GLuint normalmapId)
 {
